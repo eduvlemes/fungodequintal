@@ -87,55 +87,56 @@ function makeForm(el,product_id,form){
 
 
 
+if($('.pagina-produto').length == 0){
+    $(window).load(function(){
+        $(window).on('resize scroll', function() {
+            $('.listagem-item:not(.loaded)').each(function(){
+                let me = $(this);
+                //let product_id = me.find('.trustvox-stars').attr('data-trustvox-product-code');
+                let product_id = me.find('.produto-sobrepor').attr('href').split('https://www.fungodequintal.com.br/')[1];
+                let formSession = sessionStorage.getItem('form_' + product_id);
+                //console.log(formSession)
+                if(formSession == null){
+                    if (me.isInViewport()) {
+                        $.get($(this).find('.nome-produto').attr('href'), function(data){
+                            let form = $('<div id="'+ $(data).find('[itemprop="sku"]').text().trim() +'"></div>');
+                            form.append($(data).find('.atributos'));
+                            form.append($(data).find('.span5 .acoes-produto[data-produto-id]'));
 
-$(window).load(function(){
-    $(window).on('resize scroll', function() {
-        $('.listagem-item:not(.loaded)').each(function(){
-            let me = $(this);
-            //let product_id = me.find('.trustvox-stars').attr('data-trustvox-product-code');
-            let product_id = me.find('.produto-sobrepor').attr('href').split('https://www.fungodequintal.com.br/')[1];
-            let formSession = sessionStorage.getItem('form_' + product_id);
-            //console.log(formSession)
-            if(formSession == null){
-                if (me.isInViewport()) {
-                    $.get($(this).find('.nome-produto').attr('href'), function(data){
-                        let form = $('<div id="'+ $(data).find('[itemprop="sku"]').text().trim() +'"></div>');
-                        form.append($(data).find('.atributos'));
-                        form.append($(data).find('.span5 .acoes-produto[data-produto-id]'));
-
-                        formSession = form.html();
-                        sessionStorage.setItem('form_' + product_id, formSession);                    
-                        makeForm(me,product_id,formSession);    
-                        me.addClass('loaded');
-                    });
-                }
-            }else{
-                if(!me.hasClass('loaded')){
-                    if(formSession.status != false){
-                        makeForm(me,product_id,formSession);    
+                            formSession = form.html();
+                            sessionStorage.setItem('form_' + product_id, formSession);                    
+                            makeForm(me,product_id,formSession);    
+                            me.addClass('loaded');
+                        });
                     }
-                    me.addClass('loaded');
+                }else{
+                    if(!me.hasClass('loaded')){
+                        if(formSession.status != false){
+                            makeForm(me,product_id,formSession);    
+                        }
+                        me.addClass('loaded');
+                    }
                 }
-            }
-        });
+            });
 
-        $('body').on('click','.apx_addOnList .atributos a', function(){
-            let vid = $(this).attr('data-variacao-id');
-            $(this).closest('.apx_addOnList').find('.atributos a').removeClass('active');
-            $(this).addClass('active');
-            $(this).closest('.apx_addOnList').find('.acoes-produto').addClass('hide');
-            $(this).closest('.apx_addOnList').find('.acoes-produto[data-variacao-id="'+ vid +'"]').removeClass('hide');
-        });
+            $('body').on('click','.apx_addOnList .atributos a', function(){
+                let vid = $(this).attr('data-variacao-id');
+                $(this).closest('.apx_addOnList').find('.atributos a').removeClass('active');
+                $(this).addClass('active');
+                $(this).closest('.apx_addOnList').find('.acoes-produto').addClass('hide');
+                $(this).closest('.apx_addOnList').find('.acoes-produto[data-variacao-id="'+ vid +'"]').removeClass('hide');
+            });
 
-        $('body').on('change','.apx_addOnList .atributos select', function(){
-            let vid = $(this).find('option:selected').attr('data-variacao-id');
-            $(this).closest('.apx_addOnList').find('.atributos a').removeClass('active');
-            $(this).addClass('active');
-            $(this).closest('.apx_addOnList').find('.acoes-produto').addClass('hide');
-            $(this).closest('.apx_addOnList').find('.acoes-produto[data-variacao-id="'+ vid +'"]').removeClass('hide');
-        });
-    });    
-})
+            $('body').on('change','.apx_addOnList .atributos select', function(){
+                let vid = $(this).find('option:selected').attr('data-variacao-id');
+                $(this).closest('.apx_addOnList').find('.atributos a').removeClass('active');
+                $(this).addClass('active');
+                $(this).closest('.apx_addOnList').find('.acoes-produto').addClass('hide');
+                $(this).closest('.apx_addOnList').find('.acoes-produto[data-variacao-id="'+ vid +'"]').removeClass('hide');
+            });
+        });    
+    });
+}
 let menu = [];
 let selos = [];
 //CONTENT FROM "FULLBANNERS" ON LI PANEL
