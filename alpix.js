@@ -79,8 +79,6 @@ function makeForm(el,product_id,form){
             });
             el.find('option').wrapAll('<select class="apx_listOption"></select>');
             el.find('select').prepend('<option style="display:none" selected>Selecione a opção de '+ opcao +'...</option>')
-            //el.find('.atributos .atributo-item').unwrap();
-            //el.find('.atributos ul').replaceTagName('<select></select>');
         }
         
     }
@@ -94,7 +92,8 @@ $(window).load(function(){
     $(window).on('resize scroll', function() {
         $('.listagem-item:not(.loaded)').each(function(){
             let me = $(this);
-            let product_id = me.find('.trustvox-stars').attr('data-trustvox-product-code');
+            //let product_id = me.find('.trustvox-stars').attr('data-trustvox-product-code');
+            let product_id = me.find('.produto-sobrepor').attr('href').split('https://www.fungodequintal.com.br/')[1];
             let formSession = sessionStorage.getItem('form_' + product_id);
             //console.log(formSession)
             if(formSession == null){
